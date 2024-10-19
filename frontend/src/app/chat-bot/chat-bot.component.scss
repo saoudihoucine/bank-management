@@ -1,0 +1,92 @@
+/* Chat bubble icon in the bottom right */
+.chat-bubble-icon {
+  position: fixed;
+  bottom: 40px;
+  right: 20px;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 35%;
+  padding: 15px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chat-bubble-icon i {
+  font-size: 24px;
+}
+
+.chat-window-container {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 340px;
+  display: none;
+}
+
+.chat-window-container.open {
+  display: block;
+}
+
+.chat-window {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chat-body {
+  max-height: 200px;
+  overflow-x: hidden;
+  padding: 10px;
+  background-color: #f8f9fa;
+  scroll-behavior: smooth;
+}
+
+.chat-footer {
+  padding: 10px;
+}
+
+.user-bubble {
+  background-color: #4caf50;
+  color: white;
+  border-radius: 20px;
+  padding: 10px;
+  max-width:max-content;
+  text-align: left;
+}
+
+.response-bubble {
+  background-color: #f1f0f0;
+  color: black;
+  border-radius: 20px;
+  padding: 10px;
+  max-width:max-content;
+  text-align: left;
+}
+
+input.form-control {
+  border-radius: 20px;
+}
+
+button {
+  border-radius: 20px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}

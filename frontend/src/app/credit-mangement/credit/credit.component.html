@@ -1,0 +1,169 @@
+<div class="main-content">
+    <div class="container-fluid">
+
+        <div *ngIf="!isClient" class="row">
+            <div class="col-md-12">
+                <mat-form-field class="example-full-width">
+                    <input [(ngModel)]="clientIdSearch" name="clientIdSearch" matInput placeholder="CIN" type="text"
+                        required>
+                </mat-form-field>
+                <button style="margin-left: 80px;" mat-raised-button (click)="getCreditByClient(clientIdSearch)"
+                    class="btn btn-success ms-3 pull-right">Rechecher...</button>
+            </div>
+
+        </div>
+
+        <div *ngIf="!isTransactions && !isAddCredit" class="row">
+
+            <div *ngFor="let credit of credits" class="col-lg-4 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <div class="card-header card-header-success card-header-icon">
+                        <div class="card-content">
+                            <div class="card-icon">
+                                <i class="material-icons">payments</i>
+                            </div>
+                            <!-- <div class="progress-bar-container">
+                                <div class="progress-bar" [style.width.%]="progressValue"></div>
+                            </div> -->
+                            <p class="card-title">{{credit.typeCredit.nom}}
+                            </p>
+                        </div>
+                        <p class="card-category col-5"></p>
+                        <h4 class="card-title">Montant : {{credit.montant}}
+                            <small>DT</small>
+                        </h4>
+                        <h4 class="card-title">Interet : {{credit.interet}}
+                            <small>DT</small>
+                        </h4>
+
+                        <h4 class="card-title">Statut : {{credit.statut}}
+                        </h4>
+
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+                            <i class="material-icons text-success">menu</i>
+                            <p style="cursor:pointer;" (click)="getDemandesCreditDetails(credit.id)">Details</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div *ngIf="decodedToken.role != 'DirecteurFinancement' && decodedToken.role != 'Admin'"
+                class="col-lg-1 col-md-6 col-sm-6 mt-5">
+                <div class="d-flex justify-content-center align-items-center text-white" (click)="isAddCredit = true;"
+                    style="width: 86px; height: 86px; background: linear-gradient(60deg, #66bb6a, #43a047);border-radius: 3px;margin-left: 18px;cursor:pointer;">
+                    <i class="material-icons">add</i>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div *ngIf="isAddCredit" class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Simulation de credit</h4>
+                    </div>
+                    <div class="card-body">
+                        <form #simulCreditForm="ngForm" (ngSubmit)="simulateCredit(simulCreditForm)">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field>
+                                        <mat-label>Nature de credit</mat-label>
+                                        <select (change)="onCreditTypeChange()" [(ngModel)]="creditType"
+                                            name="creditType" matNativeControl required>
+                                            <option selected value="creditPresalaire">Crédit Présalaire (Avance sur
+                                                Salaire)
+                                            </option>
+                                            <option value="creditAmenagements">Crédit Aménagements (Rénovation ou
+                                                Amélioration de
+                                                l'Habitat)</option>
+                                            <option value="créditImmobilier">Crédit Immobilier (Credim Express et Credim
+                                                Watani)
+                                            </option>
+                                            <option value="creditAutoInvest">Crédit Auto Invest (Financement de
+                                                Véhicule)</option>
+                                        </select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="creditAmount" name="creditAmount" matInput
+                                            placeholder="Montant de credit (Dinars)" type="number" [max]="creditAmount"
+                                            required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="slider-container">
+                                        <div class="slider-values">
+                                            <span class="min-value">1</span>
+                                            <span class="max-value">{{ maximal }}</span>
+                                        </div>
+
+                                        <mat-slider [(ngModel)]="creditDuration" name="creditDuration" min="1"
+                                            [max]="maximal" step="0.5" (change)="onSliderInput($event)" thumbLabel
+                                            tickInterval="1">
+                                        </mat-slider>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="netMonthly" name="netMonthly" matInput
+                                            placeholder="Revenue mensuel Net (Dinars)" type="number" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <input [(ngModel)]="file" name="file" type="file" id="file"
+                                        (change)="onFilesSelected($event)" multiple required />
+
+                                </div>
+                            </div>
+                            <div *ngIf="!isClient" class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="clientId" name="clientId" matInput placeholder="CIN"
+                                            type="text" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div *ngIf="simulateResponse" class="row">
+                                <div class="col-md-12">
+                                    <div *ngIf="simulateResponse.ratioEndettement"><b>Ratio Endettement</b> :
+                                        {{simulateResponse.ratioEndettement}}<br></div>
+                                    <div *ngIf="simulateResponse.creditCapacity"><b>Capacité de Crédit </b> :
+                                        {{simulateResponse.creditCapacity}}<br></div>
+                                    <div *ngIf="simulateResponse.creditScore"><b>Score de crédit</b> :
+                                        {{simulateResponse.creditScore}}<br></div>
+                                    <b>Taux d'Intérêt</b> : {{simulateResponse.interet}}<br>
+                                    <b>Montant</b> : {{simulateResponse.montant}}<br>
+                                    <b>Total</b> : {{simulateResponse.total}}<br>
+                                    <b>Paiement mensuel</b> : {{simulateResponse.monthlyPayment}}<br>
+                                    <b>Evaluation</b> : {{simulateResponse.evaluation}}
+                                </div>
+                            </div>
+
+                            <button *ngIf="simulateResponse&&simulateResponse.evaluation === 'Crédit approuvé.'"
+                                mat-raised-button (click)="validatedemandeCredit()"
+                                class="btn btn-success pull-right">Valider</button>
+                            <button mat-raised-button type="submit" [disabled]="!simulCreditForm.valid" class="btn btn-success pull-right">Simuler</button>
+                            <button (click)="isAddCredit=false" mat-raised-button type="button"
+                                class="btn btn-success pull-right">Annuler</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

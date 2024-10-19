@@ -1,0 +1,254 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div *ngIf="!isAddUser &&  !isEditUser" class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title ">Liste des users <button mat-raised-button (click)="isAddUser=true"
+                                class="btn btn-success pull-right">
+                                <i class="material-icons">person_add</i>
+                            </button></h4>
+
+                        <!-- <label>
+                            <input checked type="radio" name="userRole" value="DirecteurFinancement"
+                                (change)="getUsers('DirecteurFinancement')"> DirecteurFinancement
+                        </label>
+                        <label>
+                            <input type="radio" name="userRole" value="ChargeClientele"
+                                (change)="getUsers('ChargeClientele')"> Charge Clientele
+                        </label> -->
+                        <mat-radio-group aria-label="Select an option">
+                            <mat-radio-button checked (change)="getUsers('DirecteurFinancement')" value="DirecteurFinancement">
+                                <h4 class="card-title ">Directeur Financement</h4>
+                            </mat-radio-button>&nbsp;&nbsp;&nbsp;
+                            <mat-radio-button value="ChargeClientele" (change)="getUsers('ChargeClientele')">
+                                <h4 class="card-title ">Charge Clientele</h4>
+                            </mat-radio-button>
+                        </mat-radio-group>
+
+
+
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-success">
+
+                                    <th>
+                                        NOM
+                                    </th>
+                                    <th>
+                                        PRENOM
+                                    </th>
+                                    <th>
+                                        EMAIL
+                                    </th>
+                                    <th>
+                                        AGENCE
+                                    </th>
+                                    <th>
+                                        AJOUTÉ LE
+                                    </th>
+                                    <th>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let user of users">
+                                        <td>{{ user.nom }}</td>
+                                        <td>{{ user.prenom }}</td>
+                                        <td>{{ user.email }}</td>
+                                        <td>{{ user.agence.nom }}</td>
+                                        <td>{{user.createdAt | date: 'dd/MM/yyyy'}}</td>
+                                        <td>
+                                            <button mat-raised-button (click)="changeStatus(user)"
+                                                class="btn btn-success pull-right">
+                                                <i class="material-icons">{{user.active ?'person_off':'person'}}</i>
+                                            </button>
+                                            <button mat-raised-button (click)="getEditedUser(user)"
+                                                class="btn btn-success pull-right">
+                                                <i class="material-icons">manage_accounts</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="isAddUser" class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Ajouter un utilisateur</h4>
+                    </div>
+                    <div class="card-body">
+                        <form #userForm="ngForm" (ngSubmit)="addUser(userForm)">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="userForm.email" name="email" matInput placeholder="Email"
+                                            type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field>
+                                        <mat-label>Role</mat-label>
+                                        <select [(ngModel)]="role" name="role" matNativeControl required>
+                                            <option value="ChargeClientele"> Charge Clientele</option>
+                                            <option value="DirecteurFinancement"> Directeur Financement</option>
+                                        </select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="userForm.nom" name="nom" matInput placeholder="Nom"
+                                            type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="userForm.prenom" name="prenom" matInput placeholder="Prenom"
+                                            type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field>
+                                        <mat-label>Agence</mat-label>
+                                        <select [(ngModel)]="agenceId" name="type" matNativeControl required>
+                                            <option *ngFor="let agence of agences" value="{{agence.id}}"> {{agence.nom}}
+                                            </option>
+                                        </select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-raised-button type="submit" [disabled]="!userForm.valid" class="btn btn-success pull-right">Valider</button>
+                            <button (click)="isAddUser=false" mat-raised-button type="button"
+                                class="btn btn-success pull-right">Annuler</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="isEditUser" class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Modifier <b>{{selectedUser.nom}} {{selectedUser.prenom}}</b></h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- <form #userForm="ngForm" (ngSubmit)="editUser(selectedUser)">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedUser.id" name="id" matInput placeholder="CIN"
+                                            readonly>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedUser.email" name="email" matInput
+                                            placeholder="Email" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedUser.nom" name="nom" matInput placeholder="Nom"
+                                            type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedUser.prenom" name="prenom" matInput
+                                            placeholder="Prenom" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedUser.adresse" name="adresse" matInput
+                                            placeholder="Adresse" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-raised-button type="submit" class="btn btn-success pull-right">Valider</button>
+                            <button (click)="isEditUser=false" mat-raised-button type="button"
+                                class="btn btn-success pull-right">Annuler</button>
+                            <div class="clearfix"></div>
+                        </form> -->
+
+                        <form #userForm="ngForm" (ngSubmit)="editUser(selectedUser)">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedUser.email" name="email" matInput
+                                            placeholder="Email" type="email"
+                                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field>
+                                        <mat-label>Role</mat-label>
+                                        <select [(ngModel)]="selectedUser.role" name="role" matNativeControl required>
+                                            <option value="ChargeClientele"
+                                                [selected]="selectedUser.role == 'ChargeClientele'"> Charge Clientele
+                                            </option>
+                                            <option value="DirecteurFinancement"
+                                                [selected]="selectedUser.role == 'DirecteurFinancement'"> Directeur
+                                                Financement</option>
+                                        </select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedUser.nom" name="nom" matInput placeholder="Nom"
+                                            type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedUser.prenom" name="prenom" matInput
+                                            placeholder="Prenom" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field>
+                                        <mat-label>Agence</mat-label>
+                                        <select [(ngModel)]="selectedUser.agenceId" name="type" matNativeControl
+                                            required>
+                                            <option *ngFor="let agence of agences" value="{{agence.id}}"
+                                                [selected]="selectedUser.agenceId == agence.id"> {{agence.nom}}
+                                            </option>
+                                        </select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-raised-button type="submit" class="btn btn-success pull-right">Valider</button>
+                            <button (click)="isAddUser=false" mat-raised-button type="button"
+                                class="btn btn-success pull-right">Annuler</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

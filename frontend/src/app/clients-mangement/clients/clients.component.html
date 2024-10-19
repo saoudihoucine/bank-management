@@ -1,0 +1,181 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div *ngIf="!isAddClient &&  !isEditClient" class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title ">Liste des clients 
+                            
+                            <button *ngIf="decodedToken.role == 'ChargeClientele'" mat-raised-button (click)="isAddClient=true"
+                                class="btn btn-success pull-right">
+                                <i class="material-icons">person_add</i>
+                            </button></h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class=" text-success">
+                                    <th>
+                                        CIN
+                                    </th>
+                                    <th>
+                                        NOM
+                                    </th>
+                                    <th>
+                                        PRENOM
+                                    </th>
+                                    <th>
+                                        EMAIL
+                                    </th>
+                                    <th>
+                                        AGENCE
+                                    </th>
+                                    <th>
+                                        DEPUIS
+                                    </th>
+                                    <th>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let client of clients">
+                                        <td>{{ client.id }}</td>
+                                        <td>{{ client.nom }}</td>
+                                        <td>{{ client.prenom }}</td>
+                                        <td>{{ client.email }}</td>
+                                        <td>{{ client.agence.nom }}</td>
+                                        <td>{{client.createdAt | date: 'dd/MM/yyyy'}}</td>
+                                        <td>
+                                            <button mat-raised-button (click)="changeStatus(client)"
+                                                class="btn btn-success pull-right">
+                                                <i class="material-icons">{{client.active ?'person_off':'person'}}</i>
+                                            </button>
+                                            <button mat-raised-button (click)="getEditedClient(client)"
+                                                class="btn btn-success pull-right">
+                                                <i class="material-icons">manage_accounts</i>
+                                            </button>
+                                            <button mat-raised-button (click)="getComptesByClient(client.id)"
+                                                class="btn btn-success pull-right">
+                                                <i class="material-icons">account_balance_wallet</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="isAddClient" class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Ajouter un client</h4>
+                    </div>
+                    <div class="card-body">
+                        <form #clientForm="ngForm" (ngSubmit)="addClient(clientForm)">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="clientForm.id" pattern="^\d{8}$" name="id" matInput
+                                            placeholder="CIN" required>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="clientForm.email" name="email" matInput placeholder="Email"
+                                            type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="clientForm.nom" name="nom" matInput placeholder="Nom"
+                                            type="text" required>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="clientForm.prenom" name="prenom" matInput
+                                            placeholder="Prenom" type="text" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="clientForm.adresse" name="adresse" matInput
+                                            placeholder="Adresse" type="text" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-raised-button type="submit" [disabled]="!clientForm.valid"
+                                class="btn btn-success pull-right">Valider</button>
+                            <button (click)="isAddClient=false" mat-raised-button type="button"
+                                class="btn btn-success pull-right">Annuler</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="isEditClient" class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Modifier <b>{{selectedClient.nom}} {{selectedClient.prenom}}</b></h4>
+                    </div>
+                    <div class="card-body">
+                        <form #clientForm="ngForm" (ngSubmit)="editClient(selectedClient)">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedClient.id" name="id" matInput placeholder="CIN"
+                                            readonly>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedClient.email" name="email" matInput
+                                            placeholder="Email" type="email"
+                                            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedClient.nom" name="nom" matInput placeholder="Nom"
+                                            type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedClient.prenom" name="prenom" matInput
+                                            placeholder="Prenom" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="selectedClient.adresse" name="adresse" matInput
+                                            placeholder="Adresse" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-raised-button type="submit" [disabled]="!clientForm.valid"
+                                class="btn btn-success pull-right">Valider</button>
+                            <button (click)="isEditClient=false" mat-raised-button type="button"
+                                class="btn btn-success pull-right">Annuler</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

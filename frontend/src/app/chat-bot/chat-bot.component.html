@@ -1,0 +1,38 @@
+<div class="chat-bubble-icon" (click)="toggleChat()">
+    <i class="material-icons mt-1">chat</i>
+</div>
+
+<div class="chat-window-container" [ngClass]="{'open': chatOpen}">
+    <div class="chat-window">
+        <div class="chat-header">
+            <button class="close-btn" (click)="toggleChat()">×</button>
+        </div>
+        <div class="chat-body" #chatBody>
+            <div class="row mb-2" *ngFor="let message of chatHistory">
+                <div class="col-8" *ngIf="message.sender === 'user'">
+                    <div class="alert alert-primary user-bubble" role="alert">
+                        {{ message.text }}
+                    </div>
+                </div>
+                <div class="col-8 offset-4" *ngIf="message.sender === 'response'">
+                    <div class="alert alert-secondary response-bubble" role="alert">
+                        {{ message.text }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-footer">
+            <div class="row mt-3">
+                <div class="col-8">
+                    <input [(ngModel)]="userInput" type="text" class="form-control" placeholder="Type your message...">
+                </div>
+                <div class="col-4">
+                    <button class="btn btn-success w-100" (click)="sendMessage()">
+                        <i class="material-icons">send</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,158 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-lg-12 col-md-6 col-sm-6">
+                <a href="javascript:void(0)">
+                    <p (click)="backToComptesList()">
+                        <i class="material-icons" style="vertical-align: middle;">arrow_back</i> Liste des comptes
+                    </p>
+                </a>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="card card-stats">
+                    <div class="card-header card-header-success card-header-icon">
+                        <div class="card-icon">
+                            <i class="material-icons">content_copy</i>
+                        </div>
+                        <p class="card-category"><b>{{ transactions && transactions.length ? transactions[0].compteRib :
+                                compte.rib }}</b></p>
+                        <h3 class="card-title">{{ transactions && transactions.length ? transactions[0].compte.solde :
+                            compte.solde }}
+
+                            <small>DT</small>
+                        </h3>
+                    </div>
+                    <div class="card-footer">
+                        <div class="stats">
+
+                            <i class="material-icons text-success">menu</i>
+                            <a>{{ transactions.length}} Transaction(s)</a>
+                            <i *ngIf="!isAddTransactions" (click)="isAddTransactions = true" style="cursor:pointer;"
+                                class=" material-icons text-success">add_circle</i>
+
+                        </div>
+                    </div>
+                    <div *ngIf="isAddTransactions" class="container">
+                        <form #transactionForm="ngForm" (ngSubmit)="addTransaction(transactionForm)">
+                            <div class="row">
+                                <div class="col-12">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="motif" name="motif" matInput placeholder="Motif "
+                                            type="text" required>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="montant" name="montant" matInput placeholder="Montant "
+                                            type="number" required>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field>
+                                        <mat-label>Type</mat-label>
+                                        <select [(ngModel)]="type" name="type" matNativeControl required>
+                                            <option value="">Selectionner type ...</option>
+                                            <option *ngIf="!isClient" value="retrait">Retrait</option>
+                                            <option *ngIf="!isClient" value="dépot">Dépot</option>
+                                            <option value="transfert">Transfert</option>
+                                        </select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+
+                            <div *ngIf="type === 'transfert'" class="row">
+
+                                <div *ngIf="comptes.length>0" class="container">
+                                    <div class="row">
+
+                                        <mat-radio-group aria-label="Select an option">
+                                            <div class="col-12">
+                                                <mat-radio-button value="monCompte"
+                                                    (change)="isMonCompte=true;isAutreCompte=false">
+                                                    Mon Compte
+                                                </mat-radio-button>&nbsp;&nbsp;&nbsp;
+                                            </div>
+
+                                            <div class="col-12">
+                                                <mat-radio-button value="autreCompte"
+                                                    (change)="isAutreCompte=true;isMonCompte=false">
+                                                    Autre compte
+                                                </mat-radio-button>
+                                            </div>
+
+                                        </mat-radio-group>
+
+                                    </div>
+
+
+                                </div>
+
+                                <div *ngIf="isAutreCompte" class="col-12">
+                                    <mat-form-field class="example-full-width">
+                                        <input [(ngModel)]="compteDestinataire" name="compteDestinataire" matInput
+                                            placeholder="RIB " type="text" required>
+                                    </mat-form-field>
+                                </div>
+
+
+                                <div *ngIf="isMonCompte && comptes.length>0" class="col-md-12">
+                                    <mat-form-field>
+                                        <mat-label>Mes comptes</mat-label>
+                                        <select [(ngModel)]="compteDestinataire" name="compteDestinataire"
+                                            matNativeControl required>
+                                            <option value="">Selectionner RIB ...</option>
+                                            <ng-container *ngFor="let monCompte of comptes">
+                                                <option *ngIf="compte.rib != monCompte.rib" [value]="monCompte.rib">
+                                                    {{monCompte.rib}}</option>
+                                            </ng-container>
+                                        </select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <button mat-raised-button type="submit" [disabled]="!transactionForm.valid"
+                                class="btn btn-success pull-right">Valider</button>
+                            <button (click)="isAddTransactions=false" mat-raised-button type="button"
+                                class="btn btn-success pull-right">Annuler</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-lg-8 col-md-6 col-sm-6">
+                <div class="card">
+                    <div class="card-header card-header-success">
+                        <h4 class="card-title">Liste des transactions</h4>
+                    </div>
+                    <h3 *ngIf="transactions.length==0" class="text-success text-center mt-3 mb-2">Aucune transaction
+                    </h3><br>
+                    <div *ngIf="transactions.length>0" class="card-body table-responsive">
+                        <table class="table table-hover">
+                            <thead class="text-success">
+                                <th>REF</th>
+                                <th>Type</th>
+                                <th>Montant</th>
+                                <th>Motif</th>
+                                <th>Effectue le</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let transaction of transactions">
+                                    <td>{{transaction.id}}</td>
+                                    <td>{{transaction.type}}</td>
+                                    <td>{{transaction.montant}}</td>
+                                    <td>{{transaction.motif}}</td>
+                                    <td>{{transaction.createdAt | date: 'dd/MM/yyyy'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>

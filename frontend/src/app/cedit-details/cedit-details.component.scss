@@ -1,0 +1,96 @@
+.progress-bar-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 10px;
+    /* Set the height of the progress bar */
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #4caf50;
+    /* Color of the progress bar */
+    width: 0%;
+    /* Initial width of the progress bar (0% when empty) */
+    transition: width 0.3s ease;
+    /* Smooth transition effect */
+    border-radius: 10px 0 0 10px;
+    /* Rounded corners for the progress */
+}
+
+
+.card-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* Adds some spacing between the icon and progress bar */
+}
+
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4caf50;
+    /* Success color for the icon's background */
+    border-radius: 50%;
+}
+
+mat-progress-bar {
+    flex-grow: 1;
+    /* Allows the progress bar to take up remaining space */
+}
+
+.mat-progress-bar {
+    background-color: #4caf50 !important;
+    /* Change the background color */
+}
+
+.mat-progress-bar-fill {
+    background-color: #4caf50 !important;
+    /* Change the progress fill color */
+}
+
+mat-slider {
+    width: 80%;
+}
+
+
+.slider-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .slider-values {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 80%;
+  }
+  
+  .min-value, .max-value {
+    font-weight: bold;
+  }
+
+
+
+
+  .mat-slider.mat-accent .mat-slider-track-fill, .mat-slider.mat-accent .mat-slider-thumb, .mat-slider.mat-accent .mat-slider-thumb-label{
+    background-color: #4caf50 !important;
+  }
+
+
+  tbody {
+    display: block;
+    height: 360px;
+    overflow: auto;
+}
+
+thead,
+tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    /* even columns width , fix width of table too*/
+}
