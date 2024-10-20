@@ -21,7 +21,7 @@ const generateAccountNumber = async () => {
 
 // Controller to create a new account
 const createCompte = async (req, res) => {
-    const { clientId, categoryCode } = req.body;
+    const { clientId, categoryCode,solde } = req.body;
 
     try {
         // Ensure the client exists
@@ -56,6 +56,7 @@ const createCompte = async (req, res) => {
         const compte = await Compte.create({
             clientId,
             rib,
+            solde,
             categoryId
         });
 

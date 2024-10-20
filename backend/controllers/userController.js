@@ -31,6 +31,7 @@ const createUser = async (req, res) => {
     const { id, nom, prenom, email, adresse, role, agenceId } = req.body;
 
 
+    console.log(id, nom, prenom, email, adresse, role, agenceId)
 
     try {
         const password = generatePassword();
@@ -60,7 +61,7 @@ const createUser = async (req, res) => {
                        <p><strong>Email :</strong> ${email}</p>
                        <p><strong>Mot de passe :</strong> ${password}</p>
                        <p>Vous pouvez vous connecter à votre compte à l'adresse suivante : <a href="http://localhost:4200/#/login">Se connecter</a></p>
-                       <p>Merci de changer votre mot de passe .</p>`});
+                       `});
         }
 
         if (role === 'ChargeClientele' || role === 'DirecteurFinancement') {
@@ -80,14 +81,13 @@ const createUser = async (req, res) => {
 
             //await transporter.sendMail(mailOptions);
             return res.status(201).json({
-                response: 'Création de votre compte',
-                html: `<p>Bonjour ${nom},</p>
+                response:`<p>Bonjour ${nom},</p>
                        <p>Votre compte a été créé avec succès.</p>
                        <p>Voici vos informations de connexion :</p>
                        <p><strong>Email :</strong> ${email}</p>
                        <p><strong>Mot de passe :</strong> ${password}</p>
                        <p>Vous pouvez vous connecter à votre compte à l'adresse suivante : <a href="http://localhost:4200/#/login">Se connecter</a></p>
-                       <p>Merci de changer votre mot de passe .</p>`});
+                       `});
         }
 
         return res.status(400).json({ message: 'Rôle invalide' });

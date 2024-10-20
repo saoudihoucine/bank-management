@@ -3,7 +3,7 @@ const User = require('./models/user');
 const Compte = require('./models/compte');
 const Agence = require('./models/agence');
 const Transaction = require('./models/transaction');
-const Category = require('./models/categorie'); 
+const Category = require('./models/categorie');
 
 
 
@@ -94,7 +94,7 @@ const cities = [
     { name: 'Medenine', lat: '33.3540', lng: '10.5055' },
     { name: 'Siliana', lat: '36.0844', lng: '9.3684' },
     { name: 'Sidi Bouzid', lat: '35.0391', lng: '9.4845' }
-  ];
+];
 
 
 
@@ -109,59 +109,59 @@ const cities = [
 
 sequelize.sync({ force: true }).then(async () => {
     console.log('Base de données synchronisée');
-    
+
     const hashedPassword = await bcrypt.hash('password123', 10);
 
     for (let i = 0; i < 20; i++) {
-        const city = cities[i % cities.length]; 
-        const status = true; 
-    
+        const city = cities[i % cities.length];
+        const status = true;
+
         const agence1 = await Agence.create({
-          nom: `Agence de ${city.name}`,
-          adresse: `${city.name}, Tunisia`,
-          telephone: `+216 71 ${Math.floor(100000 + Math.random() * 900000)}`,
-          latitude: city.lat,
-          longitude: city.lng,
-          status: true
+            nom: `Agence de ${city.name}`,
+            adresse: `${city.name}, Tunisia`,
+            telephone: `+216 71 ${Math.floor(100000 + Math.random() * 900000)}`,
+            latitude: city.lat,
+            longitude: city.lng,
+            status: true
         });
 
-      }
-    
+    }
 
-    
+
+
     const agence = await Agence.create({
         nom: 'Agence de Tunis',
         adresse: 'Centre Ville, Tunis',
         telephone: '+216 71 123 456',
         latitude: '36.8065',
         longitude: '10.1815',
-        status : true
+        status: true
     });
 
 
     const creditPresalaire = await TypeCredit.create({
-        id:"creditPresalaire",
-        nom:"Crédit Présalaire (Avance sur Salaire)"
+        id: "creditPresalaire",
+        nom: "Crédit Présalaire (Avance sur Salaire)"
     });
 
     const creditAmenagements = await TypeCredit.create({
-        id:"creditAmenagements",
-        nom:"Crédit Aménagements (Rénovation ou Amélioration de l'Habitat)"
+        id: "creditAmenagements",
+        nom: "Crédit Aménagements (Rénovation ou Amélioration de l'Habitat)"
     });
 
     const créditImmobilier = await TypeCredit.create({
-        id:"créditImmobilier",
-        nom:"Crédit Immobilier (Credim Express et Credim Watani)"
+        id: "créditImmobilier",
+        nom: "Crédit Immobilier (Credim Express et Credim Watani)"
     });
 
     const creditAutoInvest = await TypeCredit.create({
-        id:"creditAutoInvest",
-        nom:"Crédit Auto Invest (Financement de Véhicule)"
+        id: "creditAutoInvest",
+        nom: "Crédit Auto Invest (Financement de Véhicule)"
     });
 
-    
+
     const client = await Client.create({
-        id: '00000001',
+        id: '12345678',
         nom: 'Hassen',
         prenom: 'Ben Salah',
         email: 'hassen.bensalah@example.com',
@@ -169,7 +169,7 @@ sequelize.sync({ force: true }).then(async () => {
         agenceId: agence.id
     });
 
-    
+
     const charge = await User.create({
         nom: 'Mohamed',
         prenom: 'Khalil',
@@ -188,7 +188,7 @@ sequelize.sync({ force: true }).then(async () => {
         agenceId: 1
     });
 
-    
+
     const df = await User.create({
         nom: 'Faten',
         prenom: 'Hajri',
@@ -204,34 +204,34 @@ sequelize.sync({ force: true }).then(async () => {
     });
 
     const compte = await Compte.create({
-        rib: '12345678901234567890', 
+        rib: '12345678901234567890',
         solde: 5000.0,
         clientId: client.id,
         categoryId: category.code
     });
 
     const compte1 = await Compte.create({
-        rib: '12345678901234567891', 
+        rib: '12345678901234567891',
         solde: 5000.0,
         clientId: client.id,
         categoryId: category.code
     });
 
     const compte2 = await Compte.create({
-        rib: '12345678901234567892', 
+        rib: '12345678901234567892',
         solde: 5000.0,
         clientId: client.id,
         categoryId: category.code
     });
 
-    
+
     for (let i = 1; i <= 10; i++) {
-        const isRetrait = i % 2 !== 0; 
+        const isRetrait = i % 2 !== 0;
 
         await Transaction.create({
             id: `TR${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${i.toString().padStart(5, '0')}`,
-            montant: isRetrait ? -(Math.random() * 500) : Math.random() * 500,  
-            type: isRetrait ? 'retrait' : 'dépot',  
+            montant: isRetrait ? -(Math.random() * 500) : Math.random() * 500,
+            type: isRetrait ? 'retrait' : 'dépot',
             compteRib: compte.rib,
             motif: isRetrait ? 'Transac retrait' : 'Transac dépot',
             approuveParChargeId: !isRetrait ? charge.id : null,
