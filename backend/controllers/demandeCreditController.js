@@ -439,7 +439,7 @@ exports.simulateCredit = async (req, res) => {
 
             const montatntDette = Math.round(montant / netSalary)
 
-            // const creditScore = Math.round(calculerScoreCredit(paymentHistory, montatntDette, duree, 2, typeCredit));
+             //const creditScore = Math.round(calculerScoreCredit(paymentHistory, montatntDette, duree, 2, typeCredit));
 
 
             const creditScore = 70;

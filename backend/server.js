@@ -107,137 +107,137 @@ const cities = [
 
 
 
-sequelize.sync({ force: false }).then(async () => {
+sequelize.sync({ force: true }).then(async () => {
     console.log('Base de données synchronisée');
     
-    // const hashedPassword = await bcrypt.hash('password123', 10);
+    const hashedPassword = await bcrypt.hash('password123', 10);
 
-    // for (let i = 0; i < 20; i++) {
-    //     const city = cities[i % cities.length]; 
-    //     const status = true; 
+    for (let i = 0; i < 20; i++) {
+        const city = cities[i % cities.length]; 
+        const status = true; 
     
-    //     const agence1 = await Agence.create({
-    //       nom: `Agence de ${city.name}`,
-    //       adresse: `${city.name}, Tunisia`,
-    //       telephone: `+216 71 ${Math.floor(100000 + Math.random() * 900000)}`,
-    //       latitude: city.lat,
-    //       longitude: city.lng,
-    //       status: true
-    //     });
+        const agence1 = await Agence.create({
+          nom: `Agence de ${city.name}`,
+          adresse: `${city.name}, Tunisia`,
+          telephone: `+216 71 ${Math.floor(100000 + Math.random() * 900000)}`,
+          latitude: city.lat,
+          longitude: city.lng,
+          status: true
+        });
 
-    //   }
+      }
     
-
-    
-    // const agence = await Agence.create({
-    //     nom: 'Agence de Tunis',
-    //     adresse: 'Centre Ville, Tunis',
-    //     telephone: '+216 71 123 456',
-    //     latitude: '36.8065',
-    //     longitude: '10.1815',
-    //     status : true
-    // });
-
-
-    // const creditPresalaire = await TypeCredit.create({
-    //     id:"creditPresalaire",
-    //     nom:"Crédit Présalaire (Avance sur Salaire)"
-    // });
-
-    // const creditAmenagements = await TypeCredit.create({
-    //     id:"creditAmenagements",
-    //     nom:"Crédit Aménagements (Rénovation ou Amélioration de l'Habitat)"
-    // });
-
-    // const créditImmobilier = await TypeCredit.create({
-    //     id:"créditImmobilier",
-    //     nom:"Crédit Immobilier (Credim Express et Credim Watani)"
-    // });
-
-    // const creditAutoInvest = await TypeCredit.create({
-    //     id:"creditAutoInvest",
-    //     nom:"Crédit Auto Invest (Financement de Véhicule)"
-    // });
 
     
-    // const client = await Client.create({
-    //     id: '00000001',
-    //     nom: 'Hassen',
-    //     prenom: 'Ben Salah',
-    //     email: 'hassen.bensalah@example.com',
-    //     password: hashedPassword,
-    //     agenceId: agence.id
-    // });
+    const agence = await Agence.create({
+        nom: 'Agence de Tunis',
+        adresse: 'Centre Ville, Tunis',
+        telephone: '+216 71 123 456',
+        latitude: '36.8065',
+        longitude: '10.1815',
+        status : true
+    });
+
+
+    const creditPresalaire = await TypeCredit.create({
+        id:"creditPresalaire",
+        nom:"Crédit Présalaire (Avance sur Salaire)"
+    });
+
+    const creditAmenagements = await TypeCredit.create({
+        id:"creditAmenagements",
+        nom:"Crédit Aménagements (Rénovation ou Amélioration de l'Habitat)"
+    });
+
+    const créditImmobilier = await TypeCredit.create({
+        id:"créditImmobilier",
+        nom:"Crédit Immobilier (Credim Express et Credim Watani)"
+    });
+
+    const creditAutoInvest = await TypeCredit.create({
+        id:"creditAutoInvest",
+        nom:"Crédit Auto Invest (Financement de Véhicule)"
+    });
 
     
-    // const charge = await User.create({
-    //     nom: 'Mohamed',
-    //     prenom: 'Khalil',
-    //     email: 'mohamed.khalil@example.com',
-    //     password: hashedPassword,
-    //     role: 'ChargeClientele',
-    //     agenceId: agence.id
-    // });
-
-    // const admin = await User.create({
-    //     nom: 'admin',
-    //     prenom: 'admin',
-    //     email: 'admin.admin@example.com',
-    //     password: hashedPassword,
-    //     role: 'Admin',
-    //     agenceId: 1
-    // });
+    const client = await Client.create({
+        id: '00000001',
+        nom: 'Hassen',
+        prenom: 'Ben Salah',
+        email: 'hassen.bensalah@example.com',
+        password: hashedPassword,
+        agenceId: agence.id
+    });
 
     
-    // const df = await User.create({
-    //     nom: 'Faten',
-    //     prenom: 'Hajri',
-    //     email: 'faten.hajri@example.com',
-    //     password: hashedPassword,
-    //     role: 'DirecteurFinancement',
-    //     agenceId: agence.id
-    // });
+    const charge = await User.create({
+        nom: 'Mohamed',
+        prenom: 'Khalil',
+        email: 'mohamed.khalil@example.com',
+        password: hashedPassword,
+        role: 'ChargeClientele',
+        agenceId: agence.id
+    });
 
-    // const category = await Category.create({
-    //     code: '1001',
-    //     description: 'Compte Courant'
-    // });
-
-    // const compte = await Compte.create({
-    //     rib: '12345678901234567890', 
-    //     solde: 5000.0,
-    //     clientId: client.id,
-    //     categoryId: category.code
-    // });
-
-    // const compte1 = await Compte.create({
-    //     rib: '12345678901234567891', 
-    //     solde: 5000.0,
-    //     clientId: client.id,
-    //     categoryId: category.code
-    // });
-
-    // const compte2 = await Compte.create({
-    //     rib: '12345678901234567892', 
-    //     solde: 5000.0,
-    //     clientId: client.id,
-    //     categoryId: category.code
-    // });
+    const admin = await User.create({
+        nom: 'admin',
+        prenom: 'admin',
+        email: 'admin.admin@example.com',
+        password: hashedPassword,
+        role: 'Admin',
+        agenceId: 1
+    });
 
     
-    // for (let i = 1; i <= 10; i++) {
-    //     const isRetrait = i % 2 !== 0; 
+    const df = await User.create({
+        nom: 'Faten',
+        prenom: 'Hajri',
+        email: 'faten.hajri@example.com',
+        password: hashedPassword,
+        role: 'DirecteurFinancement',
+        agenceId: agence.id
+    });
 
-    //     await Transaction.create({
-    //         id: `TR${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${i.toString().padStart(5, '0')}`,
-    //         montant: isRetrait ? -(Math.random() * 500) : Math.random() * 500,  
-    //         type: isRetrait ? 'retrait' : 'dépot',  
-    //         compteRib: compte.rib,
-    //         motif: isRetrait ? 'Transac retrait' : 'Transac dépot',
-    //         approuveParChargeId: !isRetrait ? charge.id : null,
-    //         approuveParClientId: isRetrait ? client.id : null
-    //     });
-    // }
+    const category = await Category.create({
+        code: '1001',
+        description: 'Compte Courant'
+    });
+
+    const compte = await Compte.create({
+        rib: '12345678901234567890', 
+        solde: 5000.0,
+        clientId: client.id,
+        categoryId: category.code
+    });
+
+    const compte1 = await Compte.create({
+        rib: '12345678901234567891', 
+        solde: 5000.0,
+        clientId: client.id,
+        categoryId: category.code
+    });
+
+    const compte2 = await Compte.create({
+        rib: '12345678901234567892', 
+        solde: 5000.0,
+        clientId: client.id,
+        categoryId: category.code
+    });
+
+    
+    for (let i = 1; i <= 10; i++) {
+        const isRetrait = i % 2 !== 0; 
+
+        await Transaction.create({
+            id: `TR${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${i.toString().padStart(5, '0')}`,
+            montant: isRetrait ? -(Math.random() * 500) : Math.random() * 500,  
+            type: isRetrait ? 'retrait' : 'dépot',  
+            compteRib: compte.rib,
+            motif: isRetrait ? 'Transac retrait' : 'Transac dépot',
+            approuveParChargeId: !isRetrait ? charge.id : null,
+            approuveParClientId: isRetrait ? client.id : null
+        });
+    }
 
     console.log('Default data created successfully.');
 

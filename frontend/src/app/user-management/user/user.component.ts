@@ -61,7 +61,8 @@ export class UserComponent implements OnInit {
   addUser(userForm): void {
     const user: User = userForm.value
     user.agenceId = this.decodedToken.agenceId
-    this.userService.createUser(user).subscribe((data: User) => {
+    this.userService.createUser(user).subscribe((data: any) => {
+      alert(data.response)
       this.getUsers(user.role)
       this.notificationService.showNotification("success", "Client ajouté avec succès .")
     },

@@ -56,7 +56,8 @@ export class ClientsComponent implements OnInit {
   addClient(clientForm): void {
     const client: Client = clientForm.value
     client.agenceId = this.decodedToken.agenceId
-    this.clientService.createClient(client).subscribe((data: Client) => {
+    this.clientService.createClient(client).subscribe((data: any) => {
+      alert(data.response)
       this.getClients()
       this.notificationService.showNotification("success", "Client ajouté avec succès .")
     },
