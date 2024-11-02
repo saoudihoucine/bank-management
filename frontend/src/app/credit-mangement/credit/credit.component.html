@@ -15,45 +15,54 @@
 
         <div *ngIf="!isTransactions && !isAddCredit" class="row">
 
-            <div *ngFor="let credit of credits" class="col-lg-4 col-md-6 col-sm-6">
-                <div class="card card-stats">
-                    <div class="card-header card-header-success card-header-icon">
-                        <div class="card-content">
-                            <div class="card-icon">
-                                <i class="material-icons">payments</i>
-                            </div>
-                            <!-- <div class="progress-bar-container">
-                                <div class="progress-bar" [style.width.%]="progressValue"></div>
-                            </div> -->
-                            <p class="card-title">{{credit.typeCredit.nom}}
-                            </p>
-                        </div>
-                        <p class="card-category col-5"></p>
-                        <h4 class="card-title">Montant : {{credit.montant}}
-                            <small>DT</small>
-                        </h4>
-                        <h4 class="card-title">Interet : {{credit.interet}}
-                            <small>DT</small>
-                        </h4>
-
-                        <h4 class="card-title">Statut : {{credit.statut}}
-                        </h4>
-
-                    </div>
-                    <div class="card-footer">
-                        <div class="stats">
-                            <i class="material-icons text-success">menu</i>
-                            <p style="cursor:pointer;" (click)="getDemandesCreditDetails(credit.id)">Details</p>
-                        </div>
-                    </div>
-                </div>
-
+            <div *ngIf="credits.length == 0 && decodedToken.role == 'client'; else creditsData" class="col-12 text-center">
+                <h1>Aucun crédit disponible</h1>
             </div>
 
-            <div *ngIf="decodedToken.role != 'DirecteurFinancement' && decodedToken.role != 'Admin'"
-                class="col-lg-1 col-md-6 col-sm-6 mt-5">
+            <ng-template #creditsData>
+
+                <div *ngFor="let credit of credits" class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="card card-stats">
+                        <div class="card-header card-header-success card-header-icon">
+                            <div class="card-content">
+                                <div class="card-icon">
+                                    <i class="material-icons">payments</i>
+                                </div>
+                                <!-- <div class="progress-bar-container">
+                                <div class="progress-bar" [style.width.%]="progressValue"></div>
+                            </div> -->
+                                <p class="card-title">{{credit.typeCredit.nom}}
+                                </p>
+                            </div>
+                            <p class="card-category col-5"></p>
+                            <h4 class="card-title">Montant : {{credit.montant}}
+                                <small>DT</small>
+                            </h4>
+                            <h4 class="card-title">Interet : {{credit.interet}}
+                                <small>DT</small>
+                            </h4>
+
+                            <h4 class="card-title">Statut : {{credit.statut}}
+                            </h4>
+
+                        </div>
+                        <div class="card-footer">
+                            <div class="stats">
+                                <i class="material-icons text-success">menu</i>
+                                <p style="cursor:pointer;" (click)="getDemandesCreditDetails(credit.id)">Details</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </ng-template>
+
+            <div *ngIf="decodedToken.role == 'ChargeClientele'" class=" col-lg-1 col-md-6 col-sm-6 mt-5">
+                <!-- <div *ngIf="decodedToken.role != 'DirecteurFinancement' && decodedToken.role != 'Admin'"
+                class="col-lg-1 col-md-6 col-sm-6 mt-5"> -->
                 <div class="d-flex justify-content-center align-items-center text-white" (click)="isAddCredit = true;"
-                    style="width: 86px; height: 86px; background: linear-gradient(60deg, #66bb6a, #43a047);border-radius: 3px;margin-left: 18px;cursor:pointer;">
+                    style="width: max-content;height: 86px;background: linear-gradient(60deg, #66bb6a, #43a047);border-radius: 3px;margin-left: 18px;cursor: pointer;padding: 10px;">
+                    Simulation de crédit
                     <i class="material-icons">add</i>
                 </div>
             </div>
@@ -154,9 +163,10 @@
                             <button *ngIf="simulateResponse&&simulateResponse.evaluation === 'Crédit approuvé.'"
                                 mat-raised-button (click)="validatedemandeCredit()"
                                 class="btn btn-success pull-right">Valider</button>
-                            <button mat-raised-button type="submit" [disabled]="!simulCreditForm.valid" class="btn btn-success pull-right">Simuler</button>
-                            <button (click)="isAddCredit=false" mat-raised-button type="button"
-                                class="btn btn-success pull-right">Annuler</button>
+                            <button mat-raised-button type="submit" [disabled]="!simulCreditForm.valid"
+                                class="btn btn-success pull-right">Simuler</button>
+                            <button *ngIf="decodedToken.role == 'ChargeClientele'" (click)="isAddCredit=false"
+                                mat-raised-button type="button" class="btn btn-success pull-right">Annuler</button>
                             <div class="clearfix"></div>
                         </form>
                     </div>

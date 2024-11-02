@@ -1,6 +1,4 @@
 const Agence = require('../models/agence');
-
-// Create a new Agence
 exports.createAgence = async (req, res) => {
     const { nom, adresse, telephone, latitude, longitude } = req.body;
     const status = true;
@@ -19,7 +17,6 @@ exports.createAgence = async (req, res) => {
     }
 };
 
-// Get all Agences
 exports.getAllAgences = async (req, res) => {
     try {
         const agences = await Agence.findAll();
@@ -29,7 +26,6 @@ exports.getAllAgences = async (req, res) => {
     }
 };
 
-// Get a single Agence by ID
 exports.getAgenceById = async (req, res) => {
     const { id } = req.params;
 
@@ -44,7 +40,6 @@ exports.getAgenceById = async (req, res) => {
     }
 };
 
-// Update an Agence
 exports.updateAgence = async (req, res) => {
     const { id } = req.params;
     const { nom, adresse, telephone, latitude, longitude, status } = req.body;
@@ -69,7 +64,6 @@ exports.updateAgence = async (req, res) => {
     }
 };
 
-// Delete an Agence
 exports.deleteAgence = async (req, res) => {
     const { id } = req.params;
 

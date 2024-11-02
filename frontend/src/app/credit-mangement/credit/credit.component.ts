@@ -25,6 +25,7 @@ export class CreditComponent implements OnInit {
   isTransactions = false;
   isAddTransactions = false;
   isAddCredit = false;
+  isSimulCredit = false;
   token = localStorage.getItem('token');
 
   demandeCredit = new DemandeCredit()
@@ -57,6 +58,9 @@ export class CreditComponent implements OnInit {
 
   constructor(private creditRequestService: DemandeCreditService, private notificationService: NotificationService, private compteService: CompteService, private route: ActivatedRoute, private router: Router, private clientService: ClientService) { }
   ngOnInit(): void {
+    if ((this.router.url).includes("credit/simuler/")) {
+      this.isAddCredit = true
+    }
     if (this.decodedToken.role == "client") {
       this.clientId = this.route.snapshot.paramMap.get('clientId');
       this.getClientByCin(this.clientId)
@@ -186,7 +190,7 @@ export class CreditComponent implements OnInit {
     this.demandeCredit.netSalary = simulCreditForm.form.value.netMonthly
     if (this.clientId) {
       this.demandeCredit.clientId = this.clientId.toString()
-    }else{
+    } else {
       this.demandeCredit.clientId = simulCreditForm.form.value.netMonthly
     }
 
@@ -213,9 +217,9 @@ export class CreditComponent implements OnInit {
     if (this.demandeCredit) {
 
       const formData = new FormData();
-     
 
-     
+
+
 
       if (this.clientId) {
         formData.append('clientId', this.clientId.toString());

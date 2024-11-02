@@ -16,7 +16,9 @@ export const ROUTES: RouteInfo[] = [
   { path: '/typography', title: 'Typography', icon: 'library_books', class: '', roles: [] },
   { path: '/icons', title: 'Icons', icon: 'bubble_chart', class: '', roles: [] },
   { path: '/maps', title: 'Maps', icon: 'location_on', class: '', roles: [] },
+  { path: '/welcome/', title: 'Dashboard', icon: 'dashboard', class: '', roles: ["client"] },
   { path: '/comptes/list/', title: 'Comptes', icon: 'account_balance_wallet', class: '', roles: ["client"] },
+  { path: '/credit/simuler/', title: 'Simulation de crédit', icon: 'payments', class: '', roles: ["client"] },
   { path: '/credit/list/', title: 'Mes credits', icon: 'payments', class: '', roles: ["client"] },
   { path: '/gestCredit/list/', title: 'Gestion des credits', icon: 'payments', class: '', roles: ["ChargeClientele", "Admin", "DirecteurFinancement"] },
   { path: '/clients', title: 'Clients', icon: 'group', class: '', roles: ["ChargeClientele", "Admin"] },
@@ -44,7 +46,7 @@ export class SidebarComponent implements OnInit {
 
 
     this.menuItems = ROUTES.filter(route => {
-      if (route.path === '/comptes/list/' || route.path === '/credit/list/') {
+      if (route.path === '/comptes/list/' || route.path === '/credit/list/' || route.path === '/credit/simuler/' || route.path === '/welcome/') {
         if (this.decodedToken.role === 'client') {
           // console.log(this.decodedToken.id.toString())      
           route.path = route.path + (this.decodedToken.id).toString();
@@ -53,14 +55,6 @@ export class SidebarComponent implements OnInit {
       }
       return route.roles.includes(this.decodedToken.role);
     });
-
-
-    console.log(this.menuItems)
-
-
-
-
-
   }
   isMobileMenu() {
     if ($(window).width() > 991) {

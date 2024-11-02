@@ -16,15 +16,11 @@ export class AuthGuard implements CanActivate {
     if (token) {
       const decodedToken: any = jwtDecode(token);
       const isExpired = this.isTokenExpired(decodedToken.exp);
-
-      console.log(decodedToken)
-
       if (!isExpired) {
-        return true; // Allow access if token is valid and not expired
+        return true; 
       }
     }
 
-    // Redirect to login page if token is not set or expired
     this.router.navigate(['/login']);
     return false;
   }

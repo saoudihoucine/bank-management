@@ -11,13 +11,13 @@ import { IconsComponent } from '../../icons/icons.component';
 import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 import { UpgradeComponent } from '../../upgrade/upgrade.component';
-import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
-import {MatRippleModule} from '@angular/material/core';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatSelectModule} from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatRippleModule } from '@angular/material/core';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select';
 import { ClientsComponent } from 'app/clients-mangement/clients/clients.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ComptesComponent } from 'app/comptes-mangement/comptes/comptes.component';
@@ -26,9 +26,10 @@ import { AgencesComponent } from 'app/agences-management/agences/agences.compone
 import { UserComponent } from 'app/user-management/user/user.component';
 import { CreditComponent } from 'app/credit-mangement/credit/credit.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import {MatSliderModule} from '@angular/material/slider';
+import { MatSliderModule } from '@angular/material/slider';
 import { CeditDetailsComponent } from 'app/cedit-details/cedit-details.component';
 import { ValidateCreditComponent } from 'app/validate-credit/validate-credit.component';
+import { WelcomingDashboardComponent } from 'app/welcoming-dashboard/welcoming-dashboard.component';
 
 
 @NgModule({
@@ -65,10 +66,11 @@ import { ValidateCreditComponent } from 'app/validate-credit/validate-credit.com
     CreditComponent,
     CeditDetailsComponent,
     ValidateCreditComponent,
+    WelcomingDashboardComponent
 
-    
+
 
   ]
 })
 
-export class AdminLayoutModule {}
+export class AdminLayoutModule { }

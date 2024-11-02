@@ -27,6 +27,7 @@ const compteRoutes = require('./routes/compteRoutes');
 const categorieRoutes = require('./routes/categorieRoutes');
 const transcationRoutes = require('./routes/transactionRoutes');
 const clientRoutes = require('./routes/clientRoutes');
+const dashboardClient = require('./routes/dashboardRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const TypeCredit = require('./models/typeCredit');
 const { paidCreditMonthly } = require('./controllers/demandeCreditController');
@@ -49,6 +50,7 @@ app.use('/api', compteRoutes);
 app.use('/api', categorieRoutes);
 app.use('/api', transcationRoutes);
 app.use('/api', clientRoutes);
+app.use('/api', dashboardClient);
 app.use('/api', chatRoutes);
 
 

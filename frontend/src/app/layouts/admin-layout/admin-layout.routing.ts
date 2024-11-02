@@ -17,6 +17,7 @@ import { UserComponent } from 'app/user-management/user/user.component';
 import { CreditComponent } from 'app/credit-mangement/credit/credit.component';
 import { CeditDetailsComponent } from 'app/cedit-details/cedit-details.component';
 import { ValidateCreditComponent } from 'app/validate-credit/validate-credit.component';
+import { WelcomingDashboardComponent } from 'app/welcoming-dashboard/welcoming-dashboard.component';
 
 
 export const AdminLayoutRoutes: Routes = [
@@ -31,10 +32,12 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'clients', component: ClientsComponent  },
     { path: 'comptes/list/:clientId', component: ComptesComponent,canActivate: [AuthGuard] },
     { path: 'credit/list/:clientId', component: CreditComponent,canActivate: [AuthGuard] },
+    { path: 'credit/simuler/:clientId', component: CreditComponent,canActivate: [AuthGuard] },
     { path: 'gestCredit/list', component: CreditComponent,canActivate: [AuthGuard] },
     { path: 'transaction/list/:rib', component: TransactionComponent ,canActivate: [AuthGuard] },
     { path: 'agences', component: AgencesComponent ,canActivate: [AuthGuard] },
     { path: 'users', component: UserComponent ,canActivate: [AuthGuard] },
     { path: 'credit/detail/:id', component: CeditDetailsComponent ,canActivate: [AuthGuard] },
     { path: 'credit/all/', component: ValidateCreditComponent ,canActivate: [AuthGuard] },
+    { path: 'welcome/:clientId', component: WelcomingDashboardComponent ,canActivate: [AuthGuard] },
 ];

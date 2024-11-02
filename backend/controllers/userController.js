@@ -10,8 +10,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'your_email@gmail.com',
-        pass: 'your_email_password'
+        user: 'emna.maatougui2018@gmail.com',
+        pass: 'emqn hppd cbtm qzjm'
     }
 });
 
@@ -41,7 +41,7 @@ const createUser = async (req, res) => {
             const { nom, prenom, email } = req.body;
             const client = await Client.create({ id: id, nom, prenom, email, password: hashedPassword, adresse, agenceId });
             const mailOptions = {
-                from: 'your_email@gmail.com',
+                from: 'emna.maatougui2018@gmail.com',
                 to: email,
                 subject: 'Création de votre compte',
                 html: `<p>Bonjour ${nom},</p>
@@ -49,11 +49,11 @@ const createUser = async (req, res) => {
                        <p>Voici vos informations de connexion :</p>
                        <p><strong>Email :</strong> ${email}</p>
                        <p><strong>Mot de passe :</strong> ${password}</p>
-                       <p>Vous pouvez vous connecter à votre compte à l'adresse suivante : <a href="http://localhost:4200/#/login">Se connecter</a></p>
-                       <p>Merci de changer votre mot de passe .</p>`
+                       <p>Vous pouvez vous connecter à votre compte à l'adresse suivante : <a href="http://localhost:4200/#/login">Se connecter</a></p>`
             };
 
-            //await transporter.sendMail(mailOptions);
+            await client.save();
+            await transporter.sendMail(mailOptions);
             return res.status(201).json({
                 response: `<p>Bonjour ${nom},</p>
                        <p>Votre compte a été créé avec succès.</p>
@@ -67,7 +67,7 @@ const createUser = async (req, res) => {
         if (role === 'ChargeClientele' || role === 'DirecteurFinancement') {
             const user = await User.create({ nom, prenom, email, password: hashedPassword, role, agenceId });
             const mailOptions = {
-                from: 'your_email@gmail.com',
+                from: 'emna.maatougui2018@gmail.com',
                 to: email,
                 subject: 'Création de votre compte',
                 html: `<p>Bonjour ${nom},</p>
@@ -75,13 +75,12 @@ const createUser = async (req, res) => {
                        <p>Voici vos informations de connexion :</p>
                        <p><strong>Email :</strong> ${email}</p>
                        <p><strong>Mot de passe :</strong> ${password}</p>
-                       <p>Vous pouvez vous connecter à votre compte à l'adresse suivante : <a href="http://localhost:4200/#/login">Se connecter</a></p>
-                       <p>Merci de changer votre mot de passe .</p>`
+                       <p>Vous pouvez vous connecter à votre compte à l'adresse suivante : <a href="http://localhost:4200/#/login">Se connecter</a></p>`
             };
-
-            //await transporter.sendMail(mailOptions);
+            await user.save();
+            await transporter.sendMail(mailOptions);
             return res.status(201).json({
-                response:`<p>Bonjour ${nom},</p>
+                response: `<p>Bonjour ${nom},</p>
                        <p>Votre compte a été créé avec succès.</p>
                        <p>Voici vos informations de connexion :</p>
                        <p><strong>Email :</strong> ${email}</p>

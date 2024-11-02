@@ -5,27 +5,27 @@ const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const Client = require('../models/client');
 const Agence = require('../models/agence');
-const { Op } = require('sequelize'); // Import Op from sequelize
+const { Op } = require('sequelize'); 
 
 
-const SECRET_KEY = 'your_secret_key'; // Remplacez par une clé secrète sécurisée
-const RESET_TOKEN_SECRET = 'your_reset_token_secret'; // Remplacez par une clé secrète pour les tokens de réinitialisation
+const SECRET_KEY = 'your_secret_key'; 
+const RESET_TOKEN_SECRET = 'your_reset_token_secret'; 
 
-// Transporteur pour envoyer les emails
+
 const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'bankamen30@gmail.com',
-        pass: 'Azerty123++'
+        user: 'emna.maatougui2018@gmail.com',
+        pass: 'emqn hppd cbtm qzjm'
     }
 });
 
-// Fonction pour gérer la connexion
+
 const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // Try to find as Client
+        
         let client = await Client.findOne({ where: { email: email } });
         if (client) {
             const isMatch = await bcrypt.compare(password, client.password);
@@ -33,7 +33,7 @@ const login = async (req, res) => {
                 return res.status(401).json({ message: 'Mot de passe incorrect ou compte inactif' });
             }
 
-            // Check if the associated agency is active
+          
             const agence = await Agence.findByPk(client.agenceId);
             if (!agence || !agence.status) {
                 return res.status(401).json({ message: 'Agence inactive' });
@@ -43,7 +43,7 @@ const login = async (req, res) => {
             return res.json({ token });
         }
 
-        // If the client is not found, try with User
+      
         let user = await User.findOne({ where: { email: email } });
         if (user) {
             const isMatch = await bcrypt.compare(password, user.password);
@@ -51,7 +51,7 @@ const login = async (req, res) => {
                 return res.status(401).json({ message: 'Mot de passe incorrect ou compte inactif' });
             }
 
-            // Check if the associated agency is active
+           
             const agence = await Agence.findByPk(user.agenceId);
             if (!agence || !agence.status) {
                 return res.status(401).json({ message: 'Agence inactive' });
@@ -86,7 +86,7 @@ const profile = async (req, res) => {
         }
 
 
-        // If the client is not found, try with User
+        
         let user = await User.findOne({ where: { id: id } });
         if (user) {
             return res.json({ user, role: user.role });
@@ -102,46 +102,45 @@ const profile = async (req, res) => {
 
 
 
-// Fonction pour gérer la récupération du mot de passe
+
 const recoverPassword = async (req, res) => {
     const { email } = req.body;
 
     try {
-        // Search for the user by email in Client or User table
+        
         let user = await Client.findOne({ where: { email: email } });
         if (!user) {
             user = await User.findOne({ where: { email: email } });
         }
 
-        // If no user is found, return 404
+       
         if (!user) {
             return res.status(404).json({ message: 'Utilisateur non trouvé' });
         }
 
-        // Generate a random reset token and set expiration to 1 hour from now
+        
         const resetToken = crypto.randomBytes(32).toString('hex');
         const resetTokenExpiration = Date.now() + 3600000; // 1 hour
 
-        // Update the user record with the reset token and expiration
+       
         await user.update({ resetToken, resetTokenExpiration });
 
-        // Construct the password reset link
+        
         const resetLink = `http://localhost:4200/#/rest-password?token=${resetToken}`;
 
-        // Define email options to send the reset link
+        
         const mailOptions = {
-            from: 'bankamen30@gmail.com',
-            // to: email,
-            to: "saoudihussein@gmail.com",
+            from: 'emna.maatougui2018@gmail.com',
+            to: email,
             subject: 'Réinitialisation du mot de passe',
             html: `<p>Vous avez demandé la réinitialisation de votre mot de passe.</p>
                    <p>Veuillez cliquer sur le lien suivant pour réinitialiser votre mot de passe :</p>
                    <a href="${resetLink}">${resetLink}</a>`
         };
 
-        //await transporter.sendMail(mailOptions);
+        await transporter.sendMail(mailOptions);
 
-        // Respond with success message including the reset link for testing
+     
         res.status(200).json({ message: resetLink });
     } catch (error) {
         console.log(error)
@@ -154,7 +153,7 @@ const resetPassword = async (req, res) => {
     const { token, newPassword } = req.body;
 
     try {
-        // Find the user or client with the valid reset token and expiration time greater than current time
+        
         let user = await User.findOne({
             where: {
                 resetToken: token,
@@ -172,25 +171,25 @@ const resetPassword = async (req, res) => {
             });
         }
 
-        // Debugging logs to track the tokens and expiration
-        console.log('Received Token:', token); // Log the token received in the request
+        
+        console.log('Received Token:', token); 
 
-        const account = user || client; // Either a user or client found
+        const account = user || client; 
 
         if (account) {
-            console.log('Stored Reset Token:', account.resetToken); // Log the token stored in the database
-            console.log('Stored Expiration:', account.resetTokenExpiration); // Log the expiration time
+            console.log('Stored Reset Token:', account.resetToken); 
+            console.log('Stored Expiration:', account.resetTokenExpiration); 
         }
 
-        // If no valid user or client found, return error message
+        
         if (!account) {
             return res.status(400).json({ message: 'Token invalide ou expiré' });
         }
 
-        // Hash the new password using bcrypt
+        
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-        // Update the account's password and clear the reset token and expiration
+        
         await account.update({
             password: hashedPassword,
             resetToken: null,
@@ -199,7 +198,7 @@ const resetPassword = async (req, res) => {
 
         res.status(200).json({ message: 'Mot de passe réinitialisé avec succès' });
     } catch (error) {
-        console.error('Error during password reset:', error); // Log the error for debugging
+        console.error('Error during password reset:', error); 
         res.status(500).json({ message: 'Erreur serveur', error });
     }
 };

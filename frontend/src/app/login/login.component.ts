@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
 
 
   onLogin(form) {
-    console.log(form.value.email)
     this.loginService.login(form.value.email, form.value.password).subscribe(
       response => {
         // Store the token and user role
@@ -45,7 +44,7 @@ export class LoginComponent implements OnInit {
         const decodedToken: any = jwtDecode(token);
         localStorage.setItem('token', token);
         if (decodedToken.role == "client") {
-          this.router.navigate(['/comptes/list/' + decodedToken.id]);
+          this.router.navigate(['/welcome/' + decodedToken.id]);
         } else {
           this.router.navigate(['/gestCredit/list']);
         }

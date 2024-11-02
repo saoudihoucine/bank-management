@@ -3,10 +3,7 @@ const sequelize = require('../config/config');
 const Client = require('./client');
 const Category = require('./categorie');
 
-// Fonction pour générer le prochain numéro de compte
 
-
-// Définir le modèle Compte
 const Compte = sequelize.define('Compte', {
     rib: {
         type: DataTypes.STRING(20),

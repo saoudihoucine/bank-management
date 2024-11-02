@@ -16,7 +16,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { ValidateCreditComponent } from './validate-credit/validate-credit.component';
 
 
 @NgModule({
@@ -40,7 +39,7 @@ import { ValidateCreditComponent } from './validate-credit/validate-credit.compo
     AppComponent,
     AdminLayoutComponent,
     LoginComponent,
-    ResetPasswordComponent,
+    ResetPasswordComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

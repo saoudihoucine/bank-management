@@ -7,7 +7,7 @@ import { Client } from '../models/client';
   providedIn: 'root'
 })
 export class ClientService {
-  private apiUrl = 'http://localhost:3000/api/admin'; // Update the URL as per your backend route
+  private apiUrl = 'http://localhost:3000/api/admin'; 
 
   constructor(private http: HttpClient) {}
 
@@ -17,6 +17,10 @@ export class ClientService {
 
   getClientById(id: string): Observable<Client> {
     return this.http.get<Client>(`${this.apiUrl}/clients/${id}`);
+  }
+
+  getDashboardClientById(id: string): Observable<Client> {
+    return this.http.get<Client>(`${this.apiUrl}/dashboard/client/${id}`);
   }
 
   createClient(client: Client): Observable<Client> {
