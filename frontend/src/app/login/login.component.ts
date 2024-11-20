@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
     const email = forgetForm.value.email;
     this.loginService.recoverPassword(email).subscribe(response => {
       console.log(response)
-      alert(response.message)
       this.notificationService.showNotification("success", "Email envoyée avec succées !")
     },
       error => {

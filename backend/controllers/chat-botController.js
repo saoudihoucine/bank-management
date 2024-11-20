@@ -31,48 +31,66 @@ exports.chat = async (req, res) => {
 
         // Vérifier si l'utilisateur demande un virement
     } else if (userMessage.toLowerCase().includes('virement')) {
-        // Exemple: "Je souhaite effectuer un virement de 100 TND vers le compte 12345678901234567890"
-        const montant = userMessage.match(/\d+/g)[0]; // Trouver le montant dans le message
-        const ribDestinataire = userMessage.match(/\d{20}/g); // Trouver le RIB destinataire
-        const client = await Client.findOne({ where: { where: { id: id } } });
+        // Exemple: "Je souhaite effectuer un virement de 100 TND de compte 12345678901234567891 vers le compte 12345678901234567890"
+        const montant = parseFloat(userMessage.match(/\d+/g)[0]); // Trouver le montant dans le message
+        const ribles = userMessage.match(/\d{20}/g); // Trouver les RIBs dans le message
+        const ribSource = ribles[0]; // Premier RIB (compte source)
+        const ribDestinataire = ribles[1]; // Deuxième RIB (compte destinataire)
 
-        if (client && ribDestinataire) {
-            const compteEmetteur = await Compte.findOne({ where: { clientId: client.id } });
+        if (ribSource && ribDestinataire) {
+            // Récupérer les comptes
+            const compteSource = await Compte.findOne({ where: { rib: ribSource } });
+            const compteDestinataire = await Compte.findOne({ where: { rib: ribDestinataire } });
 
-            if (compteEmetteur && compteEmetteur.solde >= montant) {
-                const compteDestinataire = await Compte.findOne({ where: { rib: ribDestinataire } });
+            if (compteSource && compteDestinataire) {
+                // Vérifier que les deux comptes appartiennent au même client
+                const client = await Client.findOne({ where: { id: compteSource.clientId } });
 
-                if (compteDestinataire) {
-                    // Effectuer le virement
-                    compteEmetteur.solde -= montant;
-                    compteDestinataire.solde += montant;
+                if (client && compteSource.clientId === compteDestinataire.clientId) {
+                    // Vérifier le solde suffisant
+                    if (compteSource.solde >= montant) {
+                        // Effectuer le virement
+                        compteSource.solde -= montant;
+                        compteDestinataire.solde += montant;
 
-                    await compteEmetteur.save();
-                    await compteDestinataire.save();
+                        await compteSource.save();
+                        await compteDestinataire.save();
 
-                    // Enregistrer la transaction
-                    await Transaction.create({
-                        id: `TR${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${(Math.random() * 10000).toFixed(0)}`,
-                        montant: montant,
-                        type: 'virement',
-                        compteRib: compteEmetteur.rib,
-                        approuveParClientId: client.id,
-                        motif: `Virement vers ${compteDestinataire.rib}`
-                    });
+                        // Enregistrer la transaction
+                        await Transaction.create({
+                            id: `TR${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${(Math.random() * 10000).toFixed(0)}`,
+                            montant: montant,
+                            type: 'virement',
+                            compteRib: ribSource,
+                            approuveParClientId: client.id,
+                            motif: `Virement interne vers ${ribDestinataire}`
+                        });
 
-                    botResponse = `Virement de ${montant} TND effectué avec succès vers le compte ${compteDestinataire.rib}.`;
+                        // Enregistrer la transaction
+                        await Transaction.create({
+                            id: `TR${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${(Math.random() * 10000).toFixed(0)}`,
+                            montant: montant,
+                            type: 'virement',
+                            compteRib: ribDestinataire,
+                            approuveParClientId: client.id,
+                            motif: `Virement interne de ${ribSource}`
+                        });
+
+                        botResponse = `Virement de ${montant} TND effectué avec succès de votre compte ${ribSource} vers le compte ${ribDestinataire}.`;
+                    } else {
+                        botResponse = 'Solde insuffisant pour effectuer ce virement.';
+                    }
                 } else {
-                    botResponse = 'Le compte destinataire n\'existe pas. Veuillez vérifier le RIB.';
+                    botResponse = 'Les comptes source et destinataire doivent appartenir au même client.';
                 }
             } else {
-                botResponse = 'Solde insuffisant pour effectuer ce virement.';
+                botResponse = 'L\'un des comptes spécifiés n\'existe pas. Veuillez vérifier les RIBs.';
             }
         } else {
-            botResponse = 'Je ne trouve pas votre profil ou le RIB du destinataire. Veuillez vérifier les informations fournies.';
+            botResponse = 'Je ne trouve pas les RIBs dans votre message. Veuillez vérifier les informations fournies.';
         }
-
-        // Vérifier si l'utilisateur demande le solde
-    } else if (userMessage.toLowerCase().includes('solde')) {
+    }
+    else if (userMessage.toLowerCase().includes('solde')) {
         const client = await Client.findOne({ where: { where: { id: id } } });
         if (client) {
             const comptes = await Compte.findAll({ where: { clientId: client.id } });
